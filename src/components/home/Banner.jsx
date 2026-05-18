@@ -71,7 +71,7 @@ const Banner = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="flex gap-1 items-center absolute top-10 left-0 z-10
+            className="flex gap-1 items-center absolute top-10 left-0 md:left-40 lg:left-0 z-10
             bg-base-200 text-base-content shadow-md px-4 py-2 rounded-xl text-sm font-semibold"
           >
             <IoMdHeart className="text-pink-500" size={16} />
@@ -86,7 +86,7 @@ const Banner = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute bottom-10 right-0 z-10
+            className="absolute bottom-10 right-0 md:right-40 lg:right-0 z-10
             bg-base-200 text-base-content shadow-md px-4 py-2 rounded-xl text-sm font-semibold"
           >
             🐶 Verified Pets Only
