@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { MapPin, ShieldCheck, Heart } from "lucide-react";
+import { MapPin, ShieldCheck, Heart, CircleDollarSign } from "lucide-react";
+import { Separator } from "@heroui/react";
 
 const FeaturedPets = ({ pets }) => {
   const pathname = usePathname();
@@ -17,8 +18,7 @@ const FeaturedPets = ({ pets }) => {
 
   return (
     <section className="py-16 bg-base-100">
-      <div className="max-w-7xl mx-auto px-6">
-
+      <div className="max-w-6xl mx-auto px-6">
         {/* TITLE */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -36,7 +36,6 @@ const FeaturedPets = ({ pets }) => {
 
         {/* GRID */}
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {displayedPets.map((pet, index) => (
             <motion.div
               key={pet._id}
@@ -46,7 +45,6 @@ const FeaturedPets = ({ pets }) => {
               whileHover={{ scale: 1.02 }}
               className="bg-base-200 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition"
             >
-
               {/* IMAGE */}
               <div className="relative h-56">
                 <Image
@@ -72,7 +70,6 @@ const FeaturedPets = ({ pets }) => {
 
               {/* CONTENT */}
               <div className="p-5">
-
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-bold text-base-content">
                     {pet.petName}
@@ -84,7 +81,9 @@ const FeaturedPets = ({ pets }) => {
                 </div>
 
                 <div className="mt-3 space-y-2 text-sm text-base-content/70">
-                  <p>{pet.breed} • {pet.age} • {pet.gender}</p>
+                  <p>
+                    {pet.breed} • {pet.age} • {pet.gender}
+                  </p>
 
                   <div className="flex items-center gap-1">
                     <MapPin size={14} />
@@ -95,26 +94,34 @@ const FeaturedPets = ({ pets }) => {
                     <ShieldCheck size={14} />
                     {pet.healthStatus}
                   </div>
+
+                  <div className="flex items-center gap-1">
+                    <CircleDollarSign size={14} />
+                    <p className="font-bold text-orange-500">
+                      ${pet.adoptionFee}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-5 flex items-center justify-between">
-                  <p className="font-bold text-orange-500">
-                    ${pet.adoptionFee}
-                  </p>
+                <Separator className="my-4" />
 
+                <div className="mt-5 flex items-center justify-between">
                   <Link
                     href={`/pets/${pet._id}`}
-                    className="px-4 py-2 rounded-xl bg-linear-to-r from-orange-500 to-pink-500 text-white text-sm font-semibold hover:scale-105 transition"
+                    className="btn btn-outline px-4 py-2 rounded-xl text-sm font-semibold hover:scale-105 transition"
                   >
                     View Details
                   </Link>
+                  <Link
+                    href={`/pets/#/${pet._id}`}
+                    className="px-4 py-2 rounded-xl bg-linear-to-r from-orange-500 to-pink-500 text-white text-sm font-semibold hover:scale-105 transition"
+                  >
+                    Adopt Now
+                  </Link>
                 </div>
-
               </div>
-
             </motion.div>
           ))}
-
         </div>
       </div>
     </section>
