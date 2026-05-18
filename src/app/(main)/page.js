@@ -1,4 +1,6 @@
 import Banner from "@/components/home/Banner";
+import PetCareTips from "@/components/home/PetCareTips";
+import SuccessStories from "@/components/home/SuccessStories";
 import WhyAdopt from "@/components/home/WhyAdopt";
 
 export default function Home() {
@@ -6,6 +8,8 @@ export default function Home() {
     <div>
       <Banner />
       <WhyAdopt />
+      <SuccessStories />
+      <PetCareTips />
     </div>
   );
 }
