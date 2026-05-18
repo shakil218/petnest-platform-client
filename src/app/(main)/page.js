@@ -6,7 +6,7 @@ import SuccessStories from "@/components/home/SuccessStories";
 import WhyAdopt from "@/components/home/WhyAdopt";
 import Newsletter from "@/components/shared/Newsletter";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div>
       <Banner />
