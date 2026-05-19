@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="min-h-screen bg-base-300 flex flex-col lg:flex-row">
       
-      {/* Sidebar loaded via root folder alias mapping safely */}
+      {/* Dashboard Sidebar */}
       <DashboardSidebar />
 
       {/* RENDER ACTIVE ROUTES OR DASHBOARD PANELS */}

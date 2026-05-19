@@ -240,11 +240,14 @@ const RegisterForm = () => {
           {/* ACTION BUTTON */}
           <div className="pt-2">
             <Button
+              disabled={loading}
               type="submit"
-              className="w-full btn font-bold bg-linear-to-r from-orange-500 to-pink-500 text-white rounded-xl border-0 shadow-md gap-2 normal-case"
+              className={`w-full btn font-bold bg-linear-to-r from-orange-500 to-pink-500 text-white rounded-xl border-0 shadow-md gap-2 normal-case ${
+                loading && "cursor-not-allowed"
+              }`}
             >
               <Check className="w-4 h-4" />
-              <span>Register Account</span>
+              <span>{loading ? "Creating..." : "Create Account"}</span>
             </Button>
           </div>
         </Form>

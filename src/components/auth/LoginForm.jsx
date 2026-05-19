@@ -22,12 +22,11 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
- const router = useRouter();
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -42,15 +41,17 @@ const LoginForm = () => {
       });
 
       if (error) {
-        throw new Error(error?.message || "Login failed. Please check your credentials.");
+        throw new Error(
+          error?.message || "Login failed. Please check your credentials.",
+        );
       }
 
       toast.success("🐾 Welcome back to PetNest! Redirecting...", {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "colored",
-        });
-        router.push("/");
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      router.push("/");
     } catch (error) {
       toast.error(error.message || "An unexpected error occurred.", {
         position: "top-center",
@@ -77,7 +78,9 @@ const LoginForm = () => {
         router.push("/");
       }
     } catch (error) {
-      toast.error(error.message || "Google authentication failed. Please try again.");
+      toast.error(
+        error.message || "Google authentication failed. Please try again.",
+      );
     }
   };
 
@@ -181,11 +184,14 @@ const LoginForm = () => {
           {/* Action Button */}
           <div className="pt-2">
             <Button
+              disabled={loading}
               type="submit"
-              className="w-full btn font-bold bg-linear-to-r from-orange-500 to-pink-500 text-white rounded-xl border-0 shadow-md gap-2 normal-case"
+              className={`w-full btn font-bold bg-linear-to-r from-orange-500 to-pink-500 text-white rounded-xl border-0 shadow-md gap-2 normal-case ${
+                loading && "cursor-not-allowed"
+              }`}
             >
               <Check className="w-4 h-4" />
-              <span>Log In</span>
+              <span>{loading ? "Logging in..." : "Log In"}</span>
             </Button>
           </div>
         </Form>
