@@ -200,7 +200,7 @@ const NavbarClient = () => {
                 </Link>
 
                 <Link
-                  href="/login"
+                  href="/register"
                   className="btn btn-sm rounded-lg bg-linear-to-r from-orange-500 to-pink-500 text-white font-semibold shadow-md hover:scale-105 transition"
                 >
                   <UserPlus className="w-4 h-4" /> Get Started

@@ -16,10 +16,14 @@ import {
   TextField,
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const toggleConfirmPasswordVisibility = () =>
@@ -28,61 +32,66 @@ const RegisterForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data  = Object.fromEntries(formData.entries());
+    const userInfo = Object.fromEntries(formData.entries());
 
-    // Explicit Confirm Password Cross Check Verification
-    if (data.password !== data.confirmPassword) {
+    if (userInfo.password !== userInfo.confirmPassword) {
       toast.error("❌ Passwords do not match!");
       return;
     }
-console.log(data);
+
     try {
-      // --- Placeholder Registration API Call Setup ---
-      // const response = await fetch('/api/auth/register', { method: 'POST', body: JSON.stringify(data) });
-      // const result = await response.json();
+      setLoading(true);
+      const { data, error } = await authClient.signUp.email({
+        ...userInfo,
+        callbackURL: "/",
+      });
 
-      const isSuccess = true; // Simulating successful user creation workflow
-
-      if (isSuccess) {
-        toast.success("🐾 Account created successfully! Welcome to PetNest.", {
-          position: "top-right",
-          autoClose: 3000,
-          theme: "colored",
-        });
-        // router.push("/login");
-      } else {
-        throw new Error("Registration failed. Email might already be in use.");
+      if (error) {
+        throw new Error(
+          error?.message ||
+            "Registration failed. Email might already be in use.",
+        );
       }
+
+      toast.success("🐾 Account created successfully! Welcome to PetNest.", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      router.push("/login");
     } catch (err) {
       toast.error(
         err.message || "An unexpected error occurred during signup.",
         {
-          position: "top-right",
+          position: "top-center",
           autoClose: 4000,
           theme: "colored",
         },
       );
+    } finally {
+      setLoading(false);
     }
   };
 
+
   const handleGoogleLogin = async () => {
-      try {
-        const data = await authClient.signIn.social({
-          provider: "google",
+    try {
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+
+      if (data?.session) {
+        toast.success("🐾 Welcome back to PetNest! Redirecting...", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
         });
-        
-        if (data?.session) {
-          toast.success("🐾 Welcome back to PetNest! Redirecting...", {
-            position: "top-right",
-            autoClose: 3000,
-            theme: "colored",
-          });
-          router.push("/");
-        }
-      } catch (err) {
-        toast.error("Google authentication failed. Please try again.");
+        router.push("/");
       }
-    };
+    } catch (err) {
+      toast.error("Google authentication failed. Please try again.");
+    }
+  };
 
   return (
     <div className="flex min-h-187.5 items-center justify-center bg-base-300 p-6">
@@ -97,25 +106,25 @@ console.log(data);
           </p>
         </div>
 
+        {/* GOOGLE SIGN IN BUTTON */}
+        <div className="pt-1">
+          <Button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full"
+            variant="tertiary"
+          >
+            <Icon icon="devicon:google" />
+            <span>Sign in with Google</span>
+          </Button>
+        </div>
+
         {/* HEROUI TEXT INPUT FORM CONTAINER */}
         <Form
           className="flex flex-col gap-4"
           render={(props) => <form {...props} />}
           onSubmit={onSubmit}
         >
-          {/* GOOGLE SIGN IN BUTTON */}
-          <div className="pt-1">
-            <Button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="w-full"
-              variant="tertiary"
-            >
-              <Icon icon="devicon:google" />
-              <span>Sign in with Google</span>
-            </Button>
-          </div>
-
           {/* NAME FIELD */}
           <TextField isRequired name="name" type="text" className="w-full">
             <Label className="text-xs font-semibold text-base-content/80 mb-1 block">
@@ -152,7 +161,7 @@ console.log(data);
           </TextField>
 
           {/* PHOTO URL FIELD */}
-          <TextField isRequired name="photoUrl" type="url" className="w-full">
+          <TextField isRequired name="image" type="url" className="w-full">
             <Label className="text-xs font-semibold text-base-content/80 mb-1 block">
               Profile Photo URL
             </Label>
@@ -166,13 +175,13 @@ console.log(data);
           {/* PASSWORD FIELD WITH TOGGLE BUTTON */}
           <TextField
             isRequired
-            minLength={6}
+            minLength={8}
             name="password"
             type={showPassword ? "text" : "password"}
             className="w-full"
             validate={(value) => {
-              if (value.length < 6)
-                return "Password must be at least 6 characters long";
+              if (value.length < 8)
+                return "Password must be at least 8 characters long";
               if (!/[A-Z]/.test(value))
                 return "Password must contain at least one uppercase letter";
               if (!/[a-z]/.test(value))
@@ -197,7 +206,7 @@ console.log(data);
               </button>
             </div>
             <Description className="text-[11px] text-base-content/50 mt-1 block leading-relaxed">
-              Must contain 6 characters with 1 uppercase and 1 lowercase letter.
+              Must contain 8 characters with 1 uppercase and 1 lowercase letter.
             </Description>
             <FieldError className="text-xs font-medium text-error mt-1" />
           </TextField>

@@ -16,42 +16,49 @@ import {
   TextField,
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+ const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log(data);
+    const userInfo = Object.fromEntries(formData.entries());
     try {
-      // --- Placeholder Auth API Mutation Loop ---
-      // const response = await fetch('/api/auth/login', { method: 'POST', body: JSON.stringify(data) });
-      // const result = await response.json();
+      setLoading(true);
+      const { data, error } = await authClient.signIn.email({
+        ...userInfo,
+        callbackURL: "/",
+        rememberMe: false,
+      });
 
-      const isSuccess = true; // Simulating API response confirmation
+      if (error) {
+        throw new Error(error?.message || "Login failed. Please check your credentials.");
+      }
 
-      if (isSuccess) {
-        toast.success("🐾 Welcome back to PetNest! Redirecting...", {
-          position: "top-right",
+      toast.success("🐾 Welcome back to PetNest! Redirecting...", {
+          position: "top-center",
           autoClose: 3000,
           theme: "colored",
         });
-        // router.push("/home");
-      } else {
-        throw new Error("Invalid email or password. Please try again.");
-      }
-    } catch (err) {
-      toast.error(err.message || "An unexpected error occurred.", {
-        position: "top-right",
+        router.push("/");
+    } catch (error) {
+      toast.error(error.message || "An unexpected error occurred.", {
+        position: "top-center",
         autoClose: 4000,
         theme: "colored",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,17 +67,17 @@ const LoginForm = () => {
       const data = await authClient.signIn.social({
         provider: "google",
       });
-      
+
       if (data?.session) {
         toast.success("🐾 Welcome back to PetNest! Redirecting...", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,
           theme: "colored",
         });
         router.push("/");
       }
-    } catch (err) {
-      toast.error("Google authentication failed. Please try again.");
+    } catch (error) {
+      toast.error(error.message || "Google authentication failed. Please try again.");
     }
   };
 
@@ -132,13 +139,13 @@ const LoginForm = () => {
           {/* PASSWORD FIELD WITH TOGGLE BUTTON */}
           <TextField
             isRequired
-            minLength={6}
+            minLength={8}
             name="password"
             type={showPassword ? "text" : "password"}
             className="w-full"
             validate={(value) => {
-              if (value.length < 6)
-                return "Password must be at least 6 characters long";
+              if (value.length < 8)
+                return "Password must be at least 8 characters long";
               if (!/[A-Z]/.test(value))
                 return "Password must contain at least one uppercase letter";
               if (!/[0-9]/.test(value))
