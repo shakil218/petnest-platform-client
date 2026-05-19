@@ -297,7 +297,7 @@ export default function MyListingsClient({ initialPets }) {
 
           <Link
             href="/dashboard/add-pet"
-            className="mt-3 inline-block btn btn-sm bg-orange-500 text-white font-bold rounded-xl border-0"
+            className="mt-3  btn btn-sm bg-linear-to-r from-orange-500 to-pink-500 text-white font-bold rounded-lg border-0"
           >
             Post a Pet Now
           </Link>
@@ -563,7 +563,7 @@ export default function MyListingsClient({ initialPets }) {
                             }
                             className="bg-emerald-500 text-white font-bold text-xs rounded-lg px-3 min-w-0 h-8"
                           >
-                            Approve Match
+                            Approve
                           </Button>
                         </div>
                       ) : (

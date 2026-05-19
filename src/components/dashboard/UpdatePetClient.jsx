@@ -124,7 +124,7 @@ export default function UpdatePetClient({ pet }) {
           <Button
             type="submit"
             isDisabled={loading}
-            className="bg-orange-500 text-white font-bold px-6 py-2 rounded-xl"
+            className="bg-linear-to-r from-orange-500 to-pink-500 text-white font-bold px-6 py-2 rounded-lg"
           >
             {loading ? (
               <Loader2 className="animate-spin w-4 h-4" />
