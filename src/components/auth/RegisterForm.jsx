@@ -15,6 +15,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,12 +66,23 @@ console.log(data);
   };
 
   const handleGoogleLogin = async () => {
-    try {
-      console.log("Initiating PetNest OAuth Registration Pipeline...");
-    } catch (err) {
-      toast.error("Google authentication failed. Please try again.");
-    }
-  };
+      try {
+        const data = await authClient.signIn.social({
+          provider: "google",
+        });
+        
+        if (data?.session) {
+          toast.success("🐾 Welcome back to PetNest! Redirecting...", {
+            position: "top-right",
+            autoClose: 3000,
+            theme: "colored",
+          });
+          router.push("/");
+        }
+      } catch (err) {
+        toast.error("Google authentication failed. Please try again.");
+      }
+    };
 
   return (
     <div className="flex min-h-187.5 items-center justify-center bg-base-300 p-6">

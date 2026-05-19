@@ -15,6 +15,7 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,12 +28,12 @@ const LoginForm = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-console.log(data);
+    console.log(data);
     try {
       // --- Placeholder Auth API Mutation Loop ---
       // const response = await fetch('/api/auth/login', { method: 'POST', body: JSON.stringify(data) });
       // const result = await response.json();
-      
+
       const isSuccess = true; // Simulating API response confirmation
 
       if (isSuccess) {
@@ -56,7 +57,18 @@ console.log(data);
 
   const handleGoogleLogin = async () => {
     try {
-      console.log("Initiating PetNest OAuth Federated Pipeline...");
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+      
+      if (data?.session) {
+        toast.success("🐾 Welcome back to PetNest! Redirecting...", {
+          position: "top-right",
+          autoClose: 3000,
+          theme: "colored",
+        });
+        router.push("/");
+      }
     } catch (err) {
       toast.error("Google authentication failed. Please try again.");
     }
@@ -65,7 +77,6 @@ console.log(data);
   return (
     <div className="flex min-h-150 items-center justify-center bg-base-300 p-6">
       <div className="w-full max-w-md rounded-2xl border border-base-100 bg-base-200 p-8 shadow-xl space-y-6">
-        
         {/* BRANDING LOGO ACCENT BLOCK */}
         <div className="text-center space-y-1">
           <h2 className="text-3xl font-black tracking-tight text-base-content">
@@ -76,24 +87,25 @@ console.log(data);
           </p>
         </div>
 
+        {/* GOOGLE SIGN IN BUTTON */}
+        <div className="pt-1">
+          <Button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full"
+            variant="tertiary"
+          >
+            <Icon icon="devicon:google" />
+            <span>Sign in with Google</span>
+          </Button>
+        </div>
+
         {/* HEROUI TEXT INPUT LAYOUT */}
         <Form
           className="flex flex-col gap-4"
           render={(props) => <form {...props} />}
           onSubmit={onSubmit}
         >
-          {/* GOOGLE SIGN IN BUTTON */}
-          <div className="pt-1">
-            <Button 
-              type="button"
-              onClick={handleGoogleLogin}
-              className="w-full" 
-              variant="tertiary"
-            >
-              <Icon icon="devicon:google" />
-              <span>Sign in with Google</span>
-            </Button>
-          </div>
           {/* EMAIL FIELD */}
           <TextField
             isRequired
@@ -110,8 +122,8 @@ console.log(data);
             <Label className="text-xs font-semibold text-base-content/80 mb-1 block">
               Email Address
             </Label>
-            <Input 
-              placeholder="yourname@example.com" 
+            <Input
+              placeholder="yourname@example.com"
               className="input input-bordered w-full bg-base-300 border-base-100 text-sm text-base-content placeholder:text-base-content/40"
             />
             <FieldError className="text-xs font-medium text-error mt-1" />
@@ -125,9 +137,12 @@ console.log(data);
             type={showPassword ? "text" : "password"}
             className="w-full"
             validate={(value) => {
-              if (value.length < 6) return "Password must be at least 6 characters long";
-              if (!/[A-Z]/.test(value)) return "Password must contain at least one uppercase letter";
-              if (!/[0-9]/.test(value)) return "Password must contain at least one number";
+              if (value.length < 6)
+                return "Password must be at least 6 characters long";
+              if (!/[A-Z]/.test(value))
+                return "Password must contain at least one uppercase letter";
+              if (!/[0-9]/.test(value))
+                return "Password must contain at least one number";
               return null;
             }}
           >
@@ -135,8 +150,8 @@ console.log(data);
               Password
             </Label>
             <div className="relative flex items-center">
-              <Input 
-                placeholder="••••••••" 
+              <Input
+                placeholder="••••••••"
                 className="input input-bordered w-full pr-12 bg-base-300 border-base-100 text-sm text-base-content placeholder:text-base-content/40"
               />
               <button
@@ -148,17 +163,17 @@ console.log(data);
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-            
+
             <Description className="text-[11px] text-base-content/50 mt-1 block leading-relaxed">
-              Must contain 8 characters with 1 uppercase letter and 1 numeric token.
+              Must contain 8 characters with 1 uppercase letter and 1 numeric
+              token.
             </Description>
             <FieldError className="text-xs font-medium text-error mt-1" />
           </TextField>
 
-
           {/* Action Button */}
           <div className="pt-2">
-            <Button 
+            <Button
               type="submit"
               className="w-full btn font-bold bg-linear-to-r from-orange-500 to-pink-500 text-white rounded-xl border-0 shadow-md gap-2 normal-case"
             >
@@ -172,12 +187,14 @@ console.log(data);
         <div className="text-center pt-2">
           <p className="text-xs text-base-content/60">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-error font-bold hover:underline transition">
+            <Link
+              href="/register"
+              className="text-error font-bold hover:underline transition"
+            >
               Register here
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );

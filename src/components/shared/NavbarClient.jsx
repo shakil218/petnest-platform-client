@@ -12,6 +12,8 @@ import {
   X,
   Moon,
   Sun,
+  LayoutDashboard,
+  LogOut,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -19,10 +21,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const NavbarClient = () => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
 
   //  SSR SAFE MOUNT FIX
   const [mounted, setMounted] = useState(false);
@@ -135,22 +142,71 @@ const NavbarClient = () => {
 
           </button>
 
-          {/* DESKTOP BUTTONS ONLY */}
-          <div className="hidden lg:flex gap-2">
+          {/* DESKTOP/MOBILE AUTH SYSTEM CONDITIONAL SECTION */}
+          <div className="flex gap-2">
 
-            <Link
-              href="/login"
-              className="btn btn-sm rounded-lg font-semibold shadow-md hover:scale-105 transition"
-            >
-              <LogIn className="w-4 h-4" /> Login
-            </Link>
+            {isPending ? (
+              <div className="flex items-center gap-2 text-gray-400">
+                <span className="loading loading-dots loading-sm"></span>
+              </div>
+            ) : user ? (
+              /* USER AVATAR WITH DROPDOWN MENU */
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar border-2 border-orange-400/50 hover:border-orange-500 transition p-0.5">
+                  <div className="w-10 rounded-full overflow-hidden relative">
+                    <Image
+                      src={user?.image || "/profile-placeholder.jpg"}
+                      alt={user?.name || "User Avatar"}
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow-2xl bg-base-100 border border-base-200 rounded-2xl w-65 space-y-1 text-base-content"
+                >
+                  <li className="px-4 py-2 border-b border-base-200/60 mb-1">
+                    <p className="font-bold text-xs text-default-500 uppercase tracking-wider">Account</p>
+                    <p className="font-semibold text-sm truncate max-w-full text-base-content">{user?.name || "PetNest Friend"}</p>
+                    <p className="text-xs text-default-500">{user?.email}</p>
+                  </li>
+                  <li>
+                    <Link href="/dashboard" className="flex items-center gap-2 py-2 rounded-xl hover:text-orange-500">
+                      <LayoutDashboard size={16} />
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={async () => await authClient.signOut()}
+                      className="flex items-center gap-2 py-2 rounded-xl text-error hover:bg-error/10 hover:text-error"
+                    >
+                      <LogOut size={16} />
+                      Sign Out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              /* LOGIN & SIGNUP ACCENT CONTROLS */
+              <div className="hidden lg:flex gap-2">
+                <Link
+                  href="/login"
+                  className="btn btn-sm rounded-lg font-semibold shadow-md hover:scale-105 transition"
+                >
+                  <LogIn className="w-4 h-4" /> Login
+                </Link>
 
-            <Link
-              href="/login"
-              className="btn btn-sm rounded-lg bg-linear-to-r from-orange-500 to-pink-500 text-white font-semibold shadow-md hover:scale-105 transition"
-            >
-              <UserPlus className="w-4 h-4" /> Get Started
-            </Link>
+                <Link
+                  href="/login"
+                  className="btn btn-sm rounded-lg bg-linear-to-r from-orange-500 to-pink-500 text-white font-semibold shadow-md hover:scale-105 transition"
+                >
+                  <UserPlus className="w-4 h-4" /> Get Started
+                </Link>
+              </div>
+            )}
 
           </div>
 
@@ -197,26 +253,27 @@ const NavbarClient = () => {
                 );
               })}
 
-              <div className="flex gap-2 pt-2">
+              {/* HIDE ACTION ROW CORES IF PROFILE AVATAR DROPDOWN HANDLES VISIBILITY */}
+              {!user && !isPending && (
+                <div className="flex gap-2 pt-2">
+                  <Link
+                    href="/login"
+                    className="btn btn-sm flex-1"
+                    onClick={() => setOpen(false)}
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Login
+                  </Link>
 
-                <Link
-                  href="/login"
-                  className="btn btn-sm flex-1"
-                  onClick={() => setOpen(false)}
-                >
-                  <LogIn className="w-4 h-4" />
-                  Login
-                </Link>
-
-                <Link
-                  href="/login"
-                  className="btn btn-sm flex-1 bg-linear-to-r from-orange-500 to-pink-500 text-white"
-                  onClick={() => setOpen(false)}
-                >
-                  <UserPlus className="w-4 h-4" /> Get Started
-                </Link>
-
-              </div>
+                  <Link
+                    href="/login"
+                    className="btn btn-sm flex-1 bg-linear-to-r from-orange-500 to-pink-500 text-white"
+                    onClick={() => setOpen(false)}
+                  >
+                    <UserPlus className="w-4 h-4" /> Get Started
+                  </Link>
+                </div>
+              )}
 
             </div>
           </motion.div>
