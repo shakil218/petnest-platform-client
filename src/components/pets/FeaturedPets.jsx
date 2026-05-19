@@ -6,9 +6,13 @@ import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { MapPin, ShieldCheck, Heart, CircleDollarSign } from "lucide-react";
 import { Separator } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const FeaturedPets = ({ pets }) => {
   const pathname = usePathname();
+
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
 
   const isHome = pathname === "/";
 
@@ -38,7 +42,7 @@ const FeaturedPets = ({ pets }) => {
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedPets.map((pet, index) => (
             <motion.div
-              key={pet._id}
+              key={pet?._id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
@@ -48,8 +52,8 @@ const FeaturedPets = ({ pets }) => {
               {/* IMAGE */}
               <div className="relative h-56">
                 <Image
-                  src={pet.imageUrl}
-                  alt={pet.petName}
+                  src={pet?.imageUrl}
+                  alt={pet?.name}
                   fill
                   className="object-cover"
                 />
@@ -57,14 +61,19 @@ const FeaturedPets = ({ pets }) => {
                 {/* BADGES */}
                 <div className="absolute top-3 left-3">
                   <span className="px-3 py-1 text-xs rounded-full bg-orange-500 text-white font-semibold">
-                    {pet.species}
+                    {pet?.species}
                   </span>
                 </div>
 
                 <div className="absolute top-3 right-3">
-                  <span className="px-3 py-1 text-xs rounded-full bg-green-500 text-white font-semibold">
+                  {pet?.status === "adopted" ? (
+                    <span className="px-3 py-1 text-xs rounded-full bg-pink-500/90 text-white font-semibold">
+                      Adopted
+                    </span>
+                  ) : (<span className="px-3 py-1 text-xs rounded-full bg-green-500 text-white font-semibold">
                     Available
-                  </span>
+                  </span>) }
+                  
                 </div>
               </div>
 
@@ -72,7 +81,7 @@ const FeaturedPets = ({ pets }) => {
               <div className="p-5">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-bold text-base-content">
-                    {pet.petName}
+                    {pet?.name}
                   </h3>
 
                   <button className="text-pink-500 hover:scale-110 transition">
@@ -82,23 +91,23 @@ const FeaturedPets = ({ pets }) => {
 
                 <div className="mt-3 space-y-2 text-sm text-base-content/70">
                   <p>
-                    {pet.breed} • {pet.age} • {pet.gender}
+                    {pet?.breed} • {pet?.age} years • {pet?.gender}
                   </p>
 
                   <div className="flex items-center gap-1">
                     <MapPin size={14} />
-                    {pet.location}
+                    {pet?.location}
                   </div>
 
                   <div className="flex items-center gap-1">
                     <ShieldCheck size={14} />
-                    {pet.healthStatus}
+                    {pet?.healthStatus}
                   </div>
 
                   <div className="flex items-center gap-1">
                     <CircleDollarSign size={14} />
                     <p className="font-bold text-orange-500">
-                      ${pet.adoptionFee}
+                      ${pet?.adoptionFee}
                     </p>
                   </div>
                 </div>
@@ -107,13 +116,14 @@ const FeaturedPets = ({ pets }) => {
 
                 <div className="mt-5 flex items-center justify-between">
                   <Link
-                    href={`/pets/${pet._id}`}
+                    href={`/pets/${pet?._id}`}
                     className="btn btn-outline px-4 py-2 rounded-xl text-sm font-semibold hover:scale-105 transition"
                   >
                     View Details
                   </Link>
                   <Link
-                    href={`/pets/#/${pet._id}`}
+                    href={user ? `/pets/${pet?._id}` : "/login"}
+                    disabled={pet?.status === "adopted"}
                     className="px-4 py-2 rounded-xl bg-linear-to-r from-orange-500 to-pink-500 text-white text-sm font-semibold hover:scale-105 transition"
                   >
                     Adopt Now

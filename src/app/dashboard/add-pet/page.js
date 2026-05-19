@@ -10,7 +10,7 @@ import {
   Form,
   Input,
   Label,
-  TextArea, // Fixed case: changed from Textarea to TextArea
+  TextArea,
   TextField,
 } from "@heroui/react";
 
