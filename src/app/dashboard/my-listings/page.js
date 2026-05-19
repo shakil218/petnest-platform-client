@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 async function getListingsData() {
   try {
-    // 1. Fetch user session securely on the server side
+    // Fetch user session securely on the server side
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -17,7 +17,7 @@ async function getListingsData() {
 
     const userEmail = session.user.email;
 
-    // 2. Fetch data directly from your Express live server API endpoint
+    // Fetch data directly from your Express live server API endpoint
     const res = await fetch(`http://localhost:5000/my-listings?email=${userEmail}`, {
       cache: "no-store",
     });
