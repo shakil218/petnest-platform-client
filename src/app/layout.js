@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { ToastContainer } from "react-toastify";
+import NextThemeProvider from "@/providers/NextThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
- export const metadata = {
+export const metadata = {
   title: "PetNest - Your Trusted Pet Adoption Platform",
   description:
     "Discover loving homes for pets in need with PetNest. Browse adoptable pets, share heartwarming success stories, and access essential pet care tips. Join our community and make a difference in the lives of animals today.",
@@ -25,12 +26,15 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="min-h-[calc(100vh-384.4px)]">{children}</main>
-        <Footer />
-        <ToastContainer />
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <NextThemeProvider>
+          <Navbar />
+          <main className="min-h-[calc(100vh-384.4px)]">{children}</main>
+          <Footer />
+          <ToastContainer />
+        </NextThemeProvider>
       </body>
     </html>
   );

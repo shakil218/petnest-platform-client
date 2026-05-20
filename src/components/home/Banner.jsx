@@ -42,14 +42,14 @@ const Banner = () => {
           <div className="mt-6 flex gap-4">
             <Link
               href="/pets"
-              className="btn btn-primary bg-linear-to-r from-orange-500 to-pink-500 text-white border-0 rounded-full px-6 shadow-lg hover:scale-105 transition"
+              className="bg-linear-to-r from-orange-500 to-pink-500 text-white border-0 rounded-full px-6 py-2 shadow-lg hover:scale-105 transition"
             >
               Adopt Now
             </Link>
 
             <Link
               href="/add-pet"
-              className="btn btn-outline border-orange-400 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-6 transition"
+              className=" border  border-orange-400 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full px-6 py-2 transition"
             >
               List a Pet
             </Link>

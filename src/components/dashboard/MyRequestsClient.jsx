@@ -54,7 +54,7 @@ export default function MyRequestsClient({ initialRequests }) {
     const {data:tokenData}= await authClient.token();
 
     try {
-      const res = await fetch(`http://localhost:5000/adoption-requests/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption-requests/${id}`, {
         method: "DELETE",
         headers: {
           authorization: `Bearer ${tokenData?.token}`,

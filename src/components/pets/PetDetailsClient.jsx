@@ -19,10 +19,13 @@ import {
   Heart,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const PetDetailsClient = ({ pet }) => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
+
+  const router = useRouter();
 
   // Rule check context parameter parsing
   const isOwner = pet.ownerEmail === user?.email;
@@ -70,7 +73,7 @@ const PetDetailsClient = ({ pet }) => {
     const {data:tokenData}= await authClient.token();
 
     try {
-      const res = await fetch("http://localhost:5000/adoption-requests", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/adoption-requests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,6 +94,7 @@ const PetDetailsClient = ({ pet }) => {
         pickupDate: "",
         message: "",
       });
+      router.push("/dashboard/my-requests");
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");

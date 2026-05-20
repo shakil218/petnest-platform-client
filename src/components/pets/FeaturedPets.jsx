@@ -84,7 +84,7 @@ const FeaturedPets = ({ pets }) => {
                     {pet?.name}
                   </h3>
 
-                  <button className="text-pink-500 hover:scale-110 transition">
+                  <button className="text-pink-500 hover:scale-110 transition" suppressHydrationWarning>
                     <Heart size={18} />
                   </button>
                 </div>

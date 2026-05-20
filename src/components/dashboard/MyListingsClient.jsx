@@ -64,7 +64,7 @@ export default function MyListingsClient({ initialPets }) {
       const { data: tokenData } = await authClient.token();
 
       const res = await fetch(
-        `http://localhost:5000/adoption-requests/pet/${petId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption-requests/pet/${petId}`,
         {
           headers: {
             authorization: `Bearer ${tokenData?.token}`,
@@ -102,7 +102,7 @@ export default function MyListingsClient({ initialPets }) {
     const { data: tokenData } = await authClient.token();
     try {
       const res = await fetch(
-        `http://localhost:5000/adoption-requests/${requestId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/adoption-requests/${requestId}`,
         {
           method: "PATCH",
           headers: {
@@ -205,12 +205,15 @@ export default function MyListingsClient({ initialPets }) {
     const { data: tokenData } = await authClient.token();
 
     try {
-      const res = await fetch(`http://localhost:5000/pets/${petId}`, {
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${tokenData?.token}`,
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pets/${petId}`,
+        {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`,
+          },
         },
-      });
+      );
 
       const data = await res.json();
 
@@ -374,6 +377,7 @@ export default function MyListingsClient({ initialPets }) {
                   {/* BUTTONS */}
                   <div className="space-y-2 pt-2">
                     <Button
+                      variant="tertiary"
                       onPress={() => openRequestsModal(pet._id)}
                       className="w-full btn btn-sm bg-base-300 text-base-content hover:text-orange-500 hover:bg-base-200 border-0 rounded-xl font-bold gap-2 text-xs h-9"
                     >
@@ -415,7 +419,7 @@ export default function MyListingsClient({ initialPets }) {
       {/* MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-          <div className="bg-base-200 border border-base-100 rounded-2xl w-full max-w-2xl overflow-hidden shadow-xl animate-scaleUp">
+          <div className="bg-background border border-base-100 rounded-2xl w-full max-w-2xl overflow-hidden shadow-xl animate-scaleUp">
             {/* HEADER */}
             <div className="flex items-center justify-between p-5 border-b border-base-100 bg-base-100">
               <div className="flex items-center gap-2">

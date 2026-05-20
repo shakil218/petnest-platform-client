@@ -23,7 +23,7 @@ async function getRequests() {
       headers: await headers(),
   });
     const res = await fetch(
-      `http://localhost:5000/my-requests?email=${email}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/my-requests?email=${email}`,
       {
         cache: "no-store",
         headers: {

@@ -26,7 +26,7 @@ async function getListingsData() {
       headers: await headers(),
   });
     // Fetch data directly from your Express live server API endpoint
-    const res = await fetch(`http://localhost:5000/my-listings?email=${userEmail}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-listings?email=${userEmail}`, {
       cache: "no-store",
       headers: {
         authorization: `Bearer ${token}`,

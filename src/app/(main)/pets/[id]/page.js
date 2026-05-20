@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const { id } = await params;
   try {
-    const res = await fetch(`http://localhost:5000/pets/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pets/${id}`);
     if (!res.ok) return { title: "Pet Profile | PetNest" };
 
     const pet = await res.json();
@@ -31,7 +31,7 @@ export default async function PetDetailsPage({ params }) {
   // Fetch raw pet documents cleanly from your backend deployment server setup
   let pet = null;
   try {
-    const res = await fetch(`http://localhost:5000/pets/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/pets/${id}`, {
       cache: "no-store",
       headers: {
         authorization: `Bearer ${token}`,
