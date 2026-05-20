@@ -20,9 +20,9 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function MyListingsClient({ initialPets }) {
- 
   const safePets = useMemo(() => {
     if (Array.isArray(initialPets)) return initialPets;
 
@@ -33,9 +33,8 @@ export default function MyListingsClient({ initialPets }) {
     return [];
   }, [initialPets]);
 
-  
   // STATES
-  
+
   const [pets, setPets] = useState(safePets);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,7 +47,6 @@ export default function MyListingsClient({ initialPets }) {
 
   const [requestsByPetId, setRequestsByPetId] = useState({});
 
-  
   // STATS
 
   const totalListings = pets.length;
@@ -57,15 +55,21 @@ export default function MyListingsClient({ initialPets }) {
 
   const adoptedCount = pets.filter((p) => p.status === "adopted").length;
 
-  
   // OPEN REQUEST MODAL
-  
+
   const openRequestsModal = async (petId) => {
     try {
       setLoadingRequests(true);
 
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(
         `http://localhost:5000/adoption-requests/pet/${petId}`,
+        {
+          headers: {
+            authorization: `Bearer ${tokenData?.token}`,
+          },
+        },
       );
 
       const data = await res.json();
@@ -92,10 +96,10 @@ export default function MyListingsClient({ initialPets }) {
     }
   };
 
- 
   // UPDATE REQUEST STATUS
-  
+
   const handleUpdateRequestStatus = async (requestId, nextStatus) => {
+    const { data: tokenData } = await authClient.token();
     try {
       const res = await fetch(
         `http://localhost:5000/adoption-requests/${requestId}`,
@@ -103,6 +107,7 @@ export default function MyListingsClient({ initialPets }) {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`,
           },
           body: JSON.stringify({
             status: nextStatus,
@@ -155,9 +160,7 @@ export default function MyListingsClient({ initialPets }) {
     }
   };
 
-  
   // DELETE PET
-  
   const handleDeletePet = async (petId) => {
     const confirmDelete = await new Promise((resolve) => {
       const id = toast(
@@ -199,9 +202,14 @@ export default function MyListingsClient({ initialPets }) {
 
     if (!confirmDelete) return;
 
+    const { data: tokenData } = await authClient.token();
+
     try {
       const res = await fetch(`http://localhost:5000/pets/${petId}`, {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${tokenData?.token}`,
+        },
       });
 
       const data = await res.json();

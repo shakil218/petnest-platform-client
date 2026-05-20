@@ -60,11 +60,13 @@ export default function AddPetClient() {
     petData.ownerName = ownerName; 
     petData.ownerEmail = ownerEmail; 
 
+    const {data:tokenData}= await authClient.token()
     try {
       const res = await fetch("http://localhost:5000/pets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify(petData),
       });

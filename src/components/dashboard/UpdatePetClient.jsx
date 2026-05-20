@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Loader2, Check } from "lucide-react";
 import { Button, Form, Input, Label, TextArea, TextField } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 export default function UpdatePetClient({ pet }) {
   const router = useRouter();
@@ -20,11 +21,14 @@ export default function UpdatePetClient({ pet }) {
     updatedData.age = Number(updatedData.age);
     updatedData.adoptionFee = Number(updatedData.adoptionFee);
 
+    const {data:tokenData}= await authClient.token();
+
     try {
       const res = await fetch(`http://localhost:5000/pets/${pet._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify(updatedData),
       });

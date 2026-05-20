@@ -67,11 +67,14 @@ const PetDetailsClient = ({ pet }) => {
       createdAt: new Date(),
     };
 
+    const {data:tokenData}= await authClient.token();
+
     try {
       const res = await fetch("http://localhost:5000/adoption-requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify(adoptionRequest),
       });

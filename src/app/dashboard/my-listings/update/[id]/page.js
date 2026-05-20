@@ -1,16 +1,26 @@
 import UpdatePetClient from "@/components/dashboard/UpdatePetClient";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const metadata = {
   title: "Update Pet Listing - Pet Adoption Platform",
-  description: "Update your pet listing on our adoption platform to keep the information accurate and up-to-date. Edit the details of your pet to attract potential adopters and find a loving home.",
+  description:
+    "Update your pet listing on our adoption platform to keep the information accurate and up-to-date. Edit the details of your pet to attract potential adopters and find a loving home.",
 };
 
 export const dynamic = "force-dynamic";
 
 async function getPet(id) {
+  const { token } = await auth.api.getToken({
+    headers: await headers(),
+  });
+  
   try {
     const res = await fetch(`http://localhost:5000/pets/${id}`, {
       cache: "no-store",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res.ok) return null;
@@ -23,7 +33,7 @@ async function getPet(id) {
 }
 
 export default async function UpdatePetPage({ params }) {
-  const {id} = await params;
+  const { id } = await params;
   const pet = await getPet(id);
 
   if (!pet) {

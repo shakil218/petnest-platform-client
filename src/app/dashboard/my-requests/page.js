@@ -19,9 +19,17 @@ async function getRequests() {
 
     const email = session.user.email;
 
+    const {token} = await auth.api.getToken({
+      headers: await headers(),
+  });
     const res = await fetch(
       `http://localhost:5000/my-requests?email=${email}`,
-      { cache: "no-store" }
+      {
+        cache: "no-store",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
     );
 
     if (!res.ok) return [];

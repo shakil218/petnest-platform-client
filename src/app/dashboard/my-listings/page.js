@@ -22,9 +22,15 @@ async function getListingsData() {
 
     const userEmail = session.user.email;
 
+    const {token} = await auth.api.getToken({
+      headers: await headers(),
+  });
     // Fetch data directly from your Express live server API endpoint
     const res = await fetch(`http://localhost:5000/my-listings?email=${userEmail}`, {
       cache: "no-store",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res.ok) {

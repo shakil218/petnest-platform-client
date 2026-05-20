@@ -51,9 +51,14 @@ export default function MyRequestsClient({ initialRequests }) {
 
     if (!confirmDelete) return;
 
+    const {data:tokenData}= await authClient.token();
+
     try {
       const res = await fetch(`http://localhost:5000/adoption-requests/${id}`, {
         method: "DELETE",
+        headers: {
+          authorization: `Bearer ${tokenData?.token}`,
+        },
       });
 
       if (!res.ok) throw new Error();
