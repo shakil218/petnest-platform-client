@@ -2,6 +2,11 @@ import MyListingsClient from "@/components/dashboard/MyListingsClient";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
+export const metadata = {
+  title: "Listings - Pet Adoption Platform",
+  description: "View and manage your pet listings on our adoption platform. Keep track of your pets available for adoption and update their information as needed.",
+};
+
 export const dynamic = "force-dynamic";
 
 async function getListingsData() {

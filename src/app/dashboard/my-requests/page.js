@@ -2,6 +2,11 @@ import MyRequestsClient from "@/components/dashboard/MyRequestsClient";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
+export const metadata = {
+  title: "Adoption Requests - Pet Adoption Platform",
+  description: "View and manage your adoption requests on our pet adoption platform. Keep track of the pets you've expressed interest in and stay updated on the status of your requests.",
+};
+
 export const dynamic = "force-dynamic";
 
 async function getRequests() {

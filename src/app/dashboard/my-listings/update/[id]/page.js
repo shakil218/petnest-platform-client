@@ -1,5 +1,10 @@
 import UpdatePetClient from "@/components/dashboard/UpdatePetClient";
 
+export const metadata = {
+  title: "Update Pet Listing - Pet Adoption Platform",
+  description: "Update your pet listing on our adoption platform to keep the information accurate and up-to-date. Edit the details of your pet to attract potential adopters and find a loving home.",
+};
+
 export const dynamic = "force-dynamic";
 
 async function getPet(id) {

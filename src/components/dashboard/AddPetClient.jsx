@@ -121,7 +121,7 @@ export default function AddPetClient() {
                   name="species"
                   className="select select-bordered w-full rounded-xl bg-base-300 text-sm text-base-content border-base-100 h-10.5 px-3 focus:outline-hidden"
                 >
-                  <option value="" disabled selected>Select species profile</option>
+                  <option value="" disabled>Select species profile</option>
                   {speciesOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
@@ -150,7 +150,7 @@ export default function AddPetClient() {
                   name="gender"
                   className="select select-bordered w-full rounded-xl bg-base-300 text-sm text-base-content border-base-100 h-10.5 px-3 focus:outline-hidden"
                 >
-                  <option value="" disabled selected>Select gender</option>
+                  <option value="" disabled>Select gender</option>
                   {genderOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
@@ -173,7 +173,7 @@ export default function AddPetClient() {
                   name="healthStatus"
                   className="select select-bordered w-full rounded-xl bg-base-300 text-sm text-base-content border-base-100 h-10.5 px-3 focus:outline-hidden"
                 >
-                  <option value="" disabled selected>Identify health condition</option>
+                  <option value="" disabled >Identify health condition</option>
                   {healthOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
@@ -190,7 +190,7 @@ export default function AddPetClient() {
                   name="vaccinationStatus"
                   className="select select-bordered w-full rounded-xl bg-base-300 text-sm text-base-content border-base-100 h-10.5 px-3 focus:outline-hidden"
                 >
-                  <option value="" disabled selected>Select immunization tier</option>
+                  <option value="" disabled >Select immunization tier</option>
                   {vaccinationOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
@@ -231,9 +231,9 @@ export default function AddPetClient() {
               <div className="md:col-span-2 flex flex-col gap-1">
                 <label className="text-xs font-bold text-base-content/80">Detailed Pet Biography & Story</label>
                 <TextArea
-                  isRequired
+                  required
                   name="description"
-                  minRows={4}
+                  rows={4}
                   placeholder="Tell future owners about their temperament, background rescue story, food choices, habits..."
                   className="w-full bg-base-300 rounded-xl text-sm text-base-content p-2"
                 />

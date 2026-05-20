@@ -7,6 +7,7 @@ import WhyAdopt from "@/components/home/WhyAdopt";
 import FeaturedPets from "@/components/pets/FeaturedPets";
 import Newsletter from "@/components/shared/Newsletter";
 
+
 const HomePage = async() => {
   const res = await fetch("http://localhost:5000/pets",{cache:"no-store"});
   const pets = await res.json();

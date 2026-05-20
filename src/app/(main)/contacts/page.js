@@ -1,5 +1,9 @@
 import Contacts from '@/components/contacts/Contacts';
-import React from 'react';
+
+export const metadata = {
+  title: "Contact Us - Pet Adoption Platform",
+  description: "Get in touch with us for any inquiries, support, or feedback regarding our pet adoption platform. We're here to help you find your perfect pet match.",
+};
 
 const ContactPage = () => {
   return (

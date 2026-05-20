@@ -115,7 +115,7 @@ export default function UpdatePetClient({ pet }) {
           <TextArea
             name="description"
             defaultValue={pet.description}
-            minRows={4}
+            rows={4}
           />
         </div>
 
